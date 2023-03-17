@@ -594,7 +594,7 @@ class EntitySpec {
             path = path + "snapshot=" + queryParams['snapshot'] + "&";
         }
         if (typeof queryParams['includeHomeConversions'] !== 'undefined') {
-            path = path + "includeHomeConversions" + "&";
+            path = path + "includeHomeConversions=" + queryParams['includeHomeConversions'] + "&";
         }
 
         let body = {};
@@ -614,6 +614,10 @@ class EntitySpec {
 
                     if (msg['heartbeat'] !== undefined) {
                         response.body.heartbeat = new PricingHeartbeat(msg['heartbeat']);
+                    }
+
+                    if (msg['homeConversions'] !== undefined) {
+                        response.body.homeConversions = msg['homeConversions'].map(homeConversion => new HomeConversions(homeConversion));
                     }
 
                 }
@@ -659,6 +663,10 @@ class EntitySpec {
                 else if (msg.type == "PRICE")
                 {
                     streamChunkHandler(new ClientPrice(msg));
+                }
+                else if ('homeConversions' in msg)
+                {
+                    streamChunkHandler(msg['homeConversions'].map(homeConversion => new HomeConversions(homeConversion)));
                 }
             }
         }
