@@ -129,16 +129,14 @@ class Context {
 
                     if (streamChunkHandler)
                     {
-                        let chunks = responseBody.split("\n");
-
-                        chunks.forEach(chunk => {
-                            if (chunk.length > 0)
-                            {
+                        let newlineIndex;
+                        while ((newlineIndex = responseBody.indexOf("\n")) != -1) {
+                            const chunk = responseBody.substring(0, newlineIndex);
+                            if (chunk.length > 0) {
                                 streamChunkHandler(chunk);
                             }
-
-                            responseBody = chunk;
-                        });
+                            responseBody = responseBody.substring(newlineIndex + 1);
+                        }
                     }
                 });
 
