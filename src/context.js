@@ -155,6 +155,10 @@ class Context {
                         );
                     }
                 });
+
+                response.on('error', err => {
+                    console.error(`Error while executing request ${JSON.stringify(options)}: ${err}`);
+                })
             }
         );
 
